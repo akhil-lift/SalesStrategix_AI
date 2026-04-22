@@ -45,3 +45,4 @@ A RAG-based sales assistant that indexes internal playbooks and generates summar
 - `styles.css`: Custom premium styling.
 - `data/`: Directory for input playbooks.
 - `vector_store/`: Persistent FAISS index.
+# SalesStrategix_AI
