@@ -1,0 +1,22 @@
+# Sales Playbook: Objection Handling & Pricing Guidelines
+
+## Objection: "Your price is too high"
+Strategy: Value-Based Selling.
+- Acknowledge the concern: "I understand that budget is a key consideration."
+- Reframe as ROI: "Let's look at the cost of inaction. Most clients see a 20% efficiency gain in the first quarter."
+- Focus on unique differentiators: Mention our proprietary AI analytics which competitors lack.
+
+## Objection: "We are happy with our current vendor"
+Strategy: Disruption & Differentiation.
+- "It's great that you have a solution in place. Many of our clients came from [Competitor] specifically because they needed better real-time reporting."
+- Offer a comparison: "Would you be open to a 15-minute side-by-side audit of your current playbook performance?"
+
+## Pricing Guidelines
+- Standard Tier: $500/user/month.
+- Enterprise Tier: Custom pricing based on volume.
+- Discounting: Max 10% discount for annual upfront payments. Any higher requires VP approval.
+
+## Negotiation Tactics
+1. Never give without a get: If they ask for a discount, ask for a multi-year commitment.
+2. Build rapport: Research the client's recent LinkedIn posts before the call.
+3. Use silence: After presenting the price, wait for their reaction.
