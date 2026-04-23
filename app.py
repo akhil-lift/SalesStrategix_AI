@@ -54,6 +54,10 @@ with st.sidebar:
             status = st.session_state.engine.ingest_documents()
             st.info(status)
 
+    if st.button("🗑️ Clear Chat"):
+        st.session_state.messages = []
+        st.rerun()
+
 # Chat Interface
 if "messages" not in st.session_state:
     st.session_state.messages = []
