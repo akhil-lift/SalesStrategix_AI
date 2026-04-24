@@ -1,71 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
 :root {
     --primary-color: #6366f1;
-    --secondary-color: #4f46e5;
-    --bg-color: #0f172a;
-    --card-bg: #1e293b;
+    --primary-glow: rgba(99, 102, 241, 0.4);
+    --secondary-color: #8b5cf6;
+    --bg-color: #030712; /* Very dark background */
+    --card-bg: rgba(30, 41, 59, 0.4); /* Glassmorphic */
+    --card-border: rgba(255, 255, 255, 0.08);
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
 }
 
-body {
-    background-color: var(--bg-color);
-    color: var(--text-primary);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+/* Base Body Styling */
+body, .stApp, .stApp > header {
+    background-color: var(--bg-color) !important;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.08) 0%, transparent 40%);
+    background-attachment: fixed;
+    color: var(--text-primary) !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
-.stApp {
-    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+/* Hide Streamlit Header Elements for a cleaner look */
+header[data-testid="stHeader"] {
+    background: transparent !important;
 }
 
+/* Custom Main Header */
 .main-header {
-    background: rgba(30, 41, 59, 0.7);
-    backdrop-filter: blur(10px);
-    padding: 2rem;
-    border-radius: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 2rem;
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 3rem;
+    border-radius: 1.5rem;
+    border: 1px solid var(--card-border);
+    margin-bottom: 2.5rem;
     text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: fadeInDown 0.8s ease-out;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .main-header h1 {
     font-weight: 800;
-    letter-spacing: -0.025em;
-    background: linear-gradient(to right, #818cf8, #c084fc);
+    font-size: 3.5rem;
+    letter-spacing: -0.04em;
+    background: var(--accent-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 0.5rem;
+    text-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
 }
 
+.main-header p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+/* Chat Messages */
 .stChatMessage {
-    border-radius: 1rem;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    animation: slideUp 0.4s ease-out forwards;
 }
 
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Assistant Message */
+.stChatMessage[data-testid="stChatMessageAssistant"] {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--card-border);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stChatMessage[data-testid="stChatMessageAssistant"]:hover {
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+}
+
+/* User Message */
 .stChatMessage[data-testid="stChatMessageUser"] {
-    background: rgba(99, 102, 241, 0.1);
+    background: var(--accent-gradient);
+    color: white !important;
+    border: none;
+    box-shadow: 0 4px 15px var(--primary-glow);
 }
 
-.sidebar .stButton button {
+.stChatMessage[data-testid="stChatMessageUser"] * {
+    color: white !important;
+}
+
+/* Sidebar Customization */
+section[data-testid="stSidebar"] {
+    background-color: rgba(3, 7, 18, 0.8) !important;
+    backdrop-filter: blur(20px);
+    border-right: 1px solid var(--card-border);
+}
+
+section[data-testid="stSidebar"] .stMarkdown h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Buttons */
+.stButton button {
     width: 100%;
-    border-radius: 0.5rem;
-    background-color: var(--primary-color);
-    color: white;
-    font-weight: 600;
-    transition: all 0.2s;
+    border-radius: 0.75rem !important;
+    background: var(--card-bg) !important;
+    border: 1px solid var(--card-border) !important;
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    padding: 0.75rem 1.5rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    backdrop-filter: blur(5px);
 }
 
-.sidebar .stButton button:hover {
-    background-color: var(--secondary-color);
-    transform: translateY(-1px);
+.stButton button:hover {
+    background: var(--accent-gradient) !important;
+    border-color: transparent !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px var(--primary-glow) !important;
+    color: white !important;
 }
 
+/* Input Fields */
+.stTextInput input, .stFileUploader > div {
+    background: rgba(15, 23, 42, 0.6) !important;
+    border: 1px solid var(--card-border) !important;
+    color: var(--text-primary) !important;
+    border-radius: 0.75rem !important;
+    padding: 0.75rem 1rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.stTextInput input:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 2px var(--primary-glow) !important;
+}
+
+/* File Uploader Customization */
+.stFileUploader > div {
+    border: 1px dashed rgba(148, 163, 184, 0.4) !important;
+    background: rgba(30, 41, 59, 0.3) !important;
+}
+.stFileUploader > div:hover {
+    border-color: var(--primary-color) !important;
+    background: rgba(99, 102, 241, 0.05) !important;
+}
+
+/* Source Tags */
 .source-tag {
     font-size: 0.75rem;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2px 8px;
-    border-radius: 4px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 6px 14px;
+    border-radius: 20px; /* Pill shape */
     color: var(--text-secondary);
-    margin-right: 5px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    display: inline-block;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
 }
+
+.source-tag:hover {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.4);
+    color: #e0e7ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.source-container {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--card-border);
+}
+
+/* Chat Input Styling */
+.stChatInputContainer {
+    background: rgba(15, 23, 42, 0.8) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid var(--card-border) !important;
+    border-radius: 1.5rem !important;
+    padding: 0.5rem 1rem !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2) !important;
+}
+
+.stChatInputContainer textarea {
+    color: var(--text-primary) !important;
+}
+
+/* Dividers */
+hr {
+    border-color: var(--card-border) !important;
+}
+
+/* Typography refinements */
+p, li {
+    line-height: 1.7;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    letter-spacing: -0.02em;
+}
+
+/* Footer */
+.footer-text {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+    margin-top: 2rem;
+}
+
