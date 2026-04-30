@@ -19,11 +19,34 @@ if %errorlevel% neq 0 (
 )
 echo Done!
 
-echo [3/3] Launching SalesStrategix AI...
+echo [3/3] Preparing launch...
 echo.
-echo App will open in your browser at http://localhost:8501
-echo Press Ctrl+C in this window to stop the app.
-echo.
-streamlit run app.py
+
+:: Get Local IP using Python
+for /f "tokens=*" %%i in ('python -c "import socket; print(socket.gethostbyname(socket.gethostname()))"') do set LOCAL_IP=%%i
+
+echo ============================================
+echo   CHOOSE VERSION TO RUN:
+echo ============================================
+echo   1. Streamlit (Modern UI - Default)
+echo   2. Flask (API / Custom Templates)
+echo ============================================
+set /p choice="Enter choice (1 or 2): "
+
+if "%choice%"=="2" (
+    echo.
+    echo 🚀 Starting Flask Version...
+    echo 🔗 Local Link:   http://127.0.0.1:5000
+    echo 🔗 Network Link: http://%LOCAL_IP%:5000
+    echo.
+    python app_flask.py
+) else (
+    echo.
+    echo 🚀 Starting Streamlit Version...
+    echo 🔗 Local Link:   http://localhost:8501
+    echo 🔗 Network Link: http://%LOCAL_IP%:8501
+    echo.
+    streamlit run app.py
+)
 
 pause

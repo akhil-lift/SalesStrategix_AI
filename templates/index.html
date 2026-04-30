@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SalesStrategix AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Premium Interactive Elements -->
+    <div class="cursor-glow" id="cursor-glow"></div>
+    <div class="noise-overlay"></div>
+    <!-- Advanced Animated Background Grid & Orbs -->
+    <div class="grid-background"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    
+    <div class="app-container glass-panel tilt-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fa-solid fa-bullseye"></i> Control Center</h2>
+            </div>
+            
+            <div class="sidebar-content">
+                <div class="settings-group">
+                    <label for="api-key"><i class="fa-solid fa-key"></i> Groq API Key</label>
+                    <div class="input-group">
+                        <input type="password" id="api-key" placeholder="gsk_..." autocomplete="off">
+                        <button id="save-key-btn" class="icon-btn ripple-btn" title="Save Key"><i class="fa-solid fa-check"></i></button>
+                    </div>
+                    <small id="key-status" class="status-text"></small>
+                </div>
+                
+                <hr class="divider">
+                
+                <div class="settings-group">
+                    <div class="mode-toggle-group" style="margin-bottom: 15px;">
+                        <label class="switch-label"><i class="fa-solid fa-moon"></i> Dark Mode</label>
+                        <label class="switch">
+                            <input type="checkbox" id="dark-mode-toggle" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <label for="global-theme" style="margin-top: 10px;"><i class="fa-solid fa-palette"></i> Global Experience</label>
+                    <select id="global-theme" class="theme-select">
+                        <option value="midnight">Midnight Pro (Indigo)</option>
+                        <option value="ocean">Ocean Deep (Teal)</option>
+                        <option value="rose">Rose Nebula (Pink)</option>
+                        <option value="cyber">Cyber City (Neon)</option>
+                        <option value="aurora">Aurora Night (Emerald)</option>
+                    </select>
+                </div>
+                
+                <hr class="divider">
+                
+                <div class="settings-group">
+                    <h3><i class="fa-solid fa-folder-open"></i> Knowledge Base</h3>
+                    <div class="file-upload-wrapper tilt-element magnetic-wrap">
+                        <input type="file" id="file-upload" multiple accept=".pdf,.txt,.doc,.docx,.json">
+                        <label for="file-upload" class="upload-label">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>Upload Playbooks</span>
+                        </label>
+                    </div>
+                    <small id="upload-status" class="status-text"></small>
+                </div>
+                
+                <button id="reindex-btn" class="primary-btn ripple-btn w-100">
+                    <span class="btn-content"><i class="fa-solid fa-bolt"></i> Re-index Playbooks</span>
+                </button>
+                <small id="reindex-status" class="status-text"></small>
+                
+                <hr class="divider">
+                
+                <button id="clear-chat-btn" class="secondary-btn ripple-btn w-100">
+                    <span class="btn-content"><i class="fa-solid fa-trash-can"></i> Clear Chat</span>
+                </button>
+
+                <hr class="divider">
+                
+                <div class="mode-toggle-group">
+                    <label class="switch-label"><i class="fa-solid fa-handshake-angle"></i> Role-Play Mode</label>
+                    <label class="switch">
+                        <input type="checkbox" id="roleplay-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div id="persona-selector-group" class="settings-group" style="display: none; margin-top: 10px;">
+                    <label for="persona-select"><i class="fa-solid fa-user-tie"></i> Select Persona</label>
+                    <select id="persona-select" class="theme-select">
+                        <option value="skeptical_cfo">Skeptical CFO (Price Focused)</option>
+                        <option value="ops_manager">Ops Manager (Process Focused)</option>
+                        <option value="tech_gatekeeper">Tech Gatekeeper (Security Focused)</option>
+                        <option value="champion">Enthusiastic Champion (Value Focused)</option>
+                    </select>
+                </div>
+
+                <button id="insights-btn" class="secondary-btn ripple-btn w-100" style="margin-top: 10px;">
+                    <span class="btn-content"><i class="fa-solid fa-chart-line"></i> View Sales Insights</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-area">
+            <header class="chat-header">
+                <div class="header-titles">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <h1>SalesStrategix AI</h1>
+                        <span id="roleplay-badge" class="badge roleplay-badge" style="display: none;">Role-Play Mode</span>
+                    </div>
+                    <p>Smart Playbook Companion for Sales & Business Analytics</p>
+                </div>
+                <div class="header-actions">
+                    <button id="battlecard-btn" class="icon-btn ripple-btn" title="Generate Battlecard"><i class="fa-solid fa-shield-halved"></i></button>
+                    <button id="tts-toggle" class="icon-btn ripple-btn" title="Toggle Voice Response"><i class="fa-solid fa-volume-high"></i></button>
+                    <button id="export-btn" class="icon-btn ripple-btn" title="Export Sales Brief"><i class="fa-solid fa-file-pdf"></i></button>
+                </div>
+            </header>
+            
+            <div id="chat-container" class="chat-messages">
+                <div class="scanning-line" id="scanning-line"></div>
+                <!-- Welcome message -->
+                <div class="message ai-message message-enter">
+                    <div class="message-avatar"><i class="fa-solid fa-robot"></i></div>
+                    <div class="message-content glowing-border-wrapper">
+                        <div class="glowing-border-inner">
+                            <p>Hello! I am SalesStrategix AI. Ask me about objection handling, pricing, or negotiation tactics based on your uploaded playbooks.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input-wrapper">
+                <div class="input-box glass-panel glowing-input-wrapper tilt-element">
+                    <div class="glowing-border"></div>
+                    <textarea id="user-input" placeholder="Ask about objection handling, pricing, or negotiation..." rows="1"></textarea>
+                    <button id="mic-btn" class="mic-btn ripple-btn" title="Voice Input"><i class="fa-solid fa-microphone"></i></button>
+                    <button id="send-btn" class="send-btn ripple-btn"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+                <div class="footer-text">Powered by SalesStrategix AI &bull; FAISS Vector Engine &bull; Groq LLaMA3</div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Interactive Tooltip for Sources -->
+    <div id="source-tooltip" class="tooltip glass-tooltip">
+        <div class="tooltip-header"><i class="fa-solid fa-file-lines"></i> Source Document</div>
+        <div class="tooltip-content" id="tooltip-text"></div>
+    </div>
+
+    <!-- Snippet Viewer Modal -->
+    <div id="snippet-modal" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-magnifying-glass-chart"></i> Source Snippet</h3>
+                <button id="close-modal" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" id="snippet-content"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

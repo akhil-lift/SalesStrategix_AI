@@ -38,8 +38,10 @@ class SalesStrategixEngine:
         """Load documents from the data directory and create a vector store."""
         pdf_loader = DirectoryLoader(self.data_path, glob="*.pdf", loader_cls=PyPDFLoader)
         txt_loader = DirectoryLoader(self.data_path, glob="*.txt", loader_cls=TextLoader)
+        docx_loader = DirectoryLoader(self.data_path, glob="*.docx") # Default loader
+        json_loader = DirectoryLoader(self.data_path, glob="*.json")
 
-        documents = pdf_loader.load() + txt_loader.load()
+        documents = pdf_loader.load() + txt_loader.load() + docx_loader.load() + json_loader.load()
 
         if not documents:
             return "No documents found in the data directory."
@@ -62,7 +64,7 @@ class SalesStrategixEngine:
             return True
         return False
 
-    def query(self, user_query: str):
+    def query(self, user_query: str, mode: str = "chat", persona: str = "default"):
         """Query the RAG system and return a response."""
         if not self.vector_db:
             if not self.load_index():
@@ -76,7 +78,35 @@ class SalesStrategixEngine:
 
         retriever = self.vector_db.as_retriever(search_kwargs={"k": 3})
 
-        system_prompt = """You are SalesStrategix AI, a smart sales playbook companion.
+        if mode == "roleplay":
+            persona_definitions = {
+                "skeptical_cfo": "a Skeptical CFO focused on ROI, cost-cutting, and financial risk.",
+                "ops_manager": "a Busy Operations Manager focused on efficiency, ease of implementation, and daily workflow impact.",
+                "tech_gatekeeper": "a Technical Gatekeeper focused on security, integration complexity, and technical debt.",
+                "champion": "an Enthusiastic Internal Champion who wants the solution but needs help building a business case for their boss.",
+                "default": "a potential customer."
+            }
+            persona_desc = persona_definitions.get(persona, persona_definitions["default"])
+
+            system_prompt = f"""You are acting as {persona_desc}.
+The user is a sales representative trying to sell to you. 
+Use the provided playbook context to challenge the representative, ask tough questions, and see if they follow the playbook's advice.
+After the user responds, provide your reaction as the customer AND a brief piece of constructive feedback in brackets [Feedback: ...] on whether they followed the playbook correctly.
+
+Context:
+{{context}}"""
+        elif mode == "battlecard":
+            system_prompt = """You are SalesStrategix AI. Create a high-impact 'Sales Battlecard' based on the provided context.
+Structure it with:
+1. Quick Pitch (30 seconds)
+2. Top 3 Value Propositions
+3. Handling Common Objections
+4. Competitive Edge
+
+Context:
+{context}"""
+        else:
+            system_prompt = """You are SalesStrategix AI, a smart sales playbook companion.
 Your goal is to provide concise, professional, and actionable advice grounded ONLY in the provided playbook context.
 If the answer is not in the context, politely say that the information is not available in the current playbooks.
 
@@ -107,7 +137,7 @@ Context:
                 answer = chain.invoke(user_query)
                 return {
                     "answer": answer,
-                    "sources": [doc.metadata.get("source", "Unknown") for doc in docs]
+                    "sources": [{"name": doc.metadata.get("source", "Unknown"), "content": doc.page_content} for doc in docs]
                 }
             except Exception as e:
                 err = str(e)
